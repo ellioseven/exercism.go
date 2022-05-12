@@ -16,7 +16,7 @@ func Valid(id string) bool {
 	for i := len(numbers); i != 0; i-- {
 		s := numbers[i-1]
 
-		if !unicode.IsDigit(rune(s)) {
+		if !unicode.IsDigit(s) {
 			return false
 		}
 
