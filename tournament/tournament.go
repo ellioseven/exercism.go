@@ -103,6 +103,27 @@ func Tally(reader io.Reader, writer io.Writer) error {
 		}
 	}
 
+	teamList := getTeamList(teams)
+	output := getTeamListTable(teamList)
+
+	io.WriteString(writer, output)
+
+	return nil
+}
+
+func NewStat(name string) *Stat {
+	return &Stat{
+		Name:   name,
+		Played: 0,
+		Won:    0,
+		Lost:   0,
+		Draw:   0,
+		Points: 0,
+	}
+}
+
+// create sorted slice of team stats.
+func getTeamList(teams map[string]*Stat) []Stat {
 	teamList := make([]Stat, 0)
 	for _, team := range teams {
 		teamList = append(teamList, *team)
@@ -118,6 +139,10 @@ func Tally(reader io.Reader, writer io.Writer) error {
 		return teamList[i].Points > teamList[j].Points
 	})
 
+	return teamList
+}
+
+func getTeamListTable(teamList []Stat) string {
 	output := ""
 
 	output += fmt.Sprintf(
@@ -142,18 +167,5 @@ func Tally(reader io.Reader, writer io.Writer) error {
 		)
 	}
 
-	io.WriteString(writer, output)
-
-	return nil
-}
-
-func NewStat(name string) *Stat {
-	return &Stat{
-		Name:   name,
-		Played: 0,
-		Won:    0,
-		Lost:   0,
-		Draw:   0,
-		Points: 0,
-	}
+	return output
 }
