@@ -69,25 +69,11 @@ func Tally(reader io.Reader, writer io.Writer) error {
 		}
 
 		if _, ok := teams[t1]; !ok {
-			teams[t1] = &Stat{
-				Name:   t1,
-				Played: 0,
-				Won:    0,
-				Lost:   0,
-				Draw:   0,
-				Points: 0,
-			}
+			teams[t1] = NewStat(t1)
 		}
 
 		if _, ok := teams[t2]; !ok {
-			teams[t2] = &Stat{
-				Name:   t2,
-				Played: 0,
-				Won:    0,
-				Lost:   0,
-				Draw:   0,
-				Points: 0,
-			}
+			teams[t2] = NewStat(t2)
 		}
 
 		if team, ok := teams[t1]; ok {
@@ -159,4 +145,15 @@ func Tally(reader io.Reader, writer io.Writer) error {
 	io.WriteString(writer, output)
 
 	return nil
+}
+
+func NewStat(name string) *Stat {
+	return &Stat{
+		Name:   name,
+		Played: 0,
+		Won:    0,
+		Lost:   0,
+		Draw:   0,
+		Points: 0,
+	}
 }
