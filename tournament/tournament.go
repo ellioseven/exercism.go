@@ -19,21 +19,20 @@ type Stat struct {
 	Points int
 }
 
+var pointsMap = map[string]int{
+	"win":  3,
+	"draw": 1,
+	"loss": 0,
+}
+
+var rsInverts = map[string]string{
+	"win":  "loss",
+	"draw": "draw",
+	"loss": "win",
+}
+
 func Tally(reader io.Reader, writer io.Writer) error {
 	teams := make(map[string]*Stat)
-
-	pointsMap := map[string]int{
-		"win":  3,
-		"draw": 1,
-		"loss": 0,
-	}
-
-	rsInverts := map[string]string{
-		"win":  "loss",
-		"draw": "draw",
-		"loss": "win",
-	}
-
 	input, err := io.ReadAll(reader)
 
 	if err != nil {
@@ -57,7 +56,7 @@ func Tally(reader io.Reader, writer io.Writer) error {
 		}
 
 		if len(parts) < 3 {
-			return errors.New("invalid result")
+			return errors.New("invalid line")
 		}
 
 		t1 := parts[0]
