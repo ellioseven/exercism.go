@@ -19,13 +19,13 @@ type Stat struct {
 	Points int
 }
 
-var pointsMap = map[string]int{
+var resPtsMap = map[string]int{
 	"win":  3,
 	"draw": 1,
 	"loss": 0,
 }
 
-var rsInverts = map[string]string{
+var resInvMap = map[string]string{
 	"win":  "loss",
 	"draw": "draw",
 	"loss": "win",
@@ -61,10 +61,10 @@ func Tally(reader io.Reader, writer io.Writer) error {
 
 		t1 := parts[0]
 		t2 := parts[1]
-		rs := parts[2]
-		rsInvert := rsInverts[rs]
+		res := parts[2]
+		resInv := resInvMap[res]
 
-		if _, ok := pointsMap[rs]; !ok {
+		if _, ok := resPtsMap[res]; !ok {
 			return errors.New("invalid result")
 		}
 
@@ -78,11 +78,11 @@ func Tally(reader io.Reader, writer io.Writer) error {
 
 		if team, ok := teams[t1]; ok {
 			team.Played += 1
-			team.Points += pointsMap[rs]
+			team.Points += resPtsMap[res]
 
-			if rs == "win" {
+			if res == "win" {
 				team.Won += 1
-			} else if rs == "loss" {
+			} else if res == "loss" {
 				team.Lost += 1
 			} else {
 				team.Draw += 1
@@ -91,11 +91,11 @@ func Tally(reader io.Reader, writer io.Writer) error {
 
 		if team, ok := teams[t2]; ok {
 			team.Played += 1
-			team.Points += pointsMap[rsInvert]
+			team.Points += resPtsMap[resInv]
 
-			if rs == "win" {
+			if res == "win" {
 				team.Lost += 1
-			} else if rs == "loss" {
+			} else if res == "loss" {
 				team.Won += 1
 			} else {
 				team.Draw += 1
