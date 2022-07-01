@@ -1,96 +1,60 @@
 package twelve
 
 import (
-	"fmt"
 	"strings"
 )
 
-func getDayLabels() map[int]string {
-	return map[int]string{
-		1:  "first",
-		2:  "second",
-		3:  "third",
-		4:  "fourth",
-		5:  "fifth",
-		6:  "sixth",
-		7:  "seventh",
-		8:  "eighth",
-		9:  "ninth",
-		10: "tenth",
-		11: "eleventh",
-		12: "twelfth",
-	}
+var gifts = []string{
+	"a Partridge in a Pear Tree",
+	"two Turtle Doves",
+	"three French Hens",
+	"four Calling Birds",
+	"five Gold Rings",
+	"six Geese-a-Laying",
+	"seven Swans-a-Swimming",
+	"eight Maids-a-Milking",
+	"nine Ladies Dancing",
+	"ten Lords-a-Leaping",
+	"eleven Pipers Piping",
+	"twelve Drummers Drumming",
 }
 
-func getNumLabels() map[int]string {
-	return map[int]string{
-		1:  "a",
-		2:  "two",
-		3:  "three",
-		4:  "four",
-		5:  "five",
-		6:  "six",
-		7:  "seven",
-		8:  "eight",
-		9:  "nine",
-		10: "ten",
-		11: "eleven",
-		12: "twelve",
-	}
-}
-
-func getItems() map[int]string {
-	return map[int]string{
-		1:  "Partridge in a Pear Tree",
-		2:  "Turtle Doves",
-		3:  "French Hens",
-		4:  "Calling Birds",
-		5:  "Gold Rings",
-		6:  "Geese-a-Laying",
-		7:  "Swans-a-Swimming",
-		8:  "Maids-a-Milking",
-		9:  "Ladies Dancing",
-		10: "Lords-a-Leaping",
-		11: "Pipers Piping",
-		12: "Drummers Drumming",
-	}
+var days = []string{
+	"first",
+	"second",
+	"third",
+	"fourth",
+	"fifth",
+	"sixth",
+	"seventh",
+	"eighth",
+	"ninth",
+	"tenth",
+	"eleventh",
+	"twelfth",
 }
 
 func Verse(i int) string {
-	dayLabels := getDayLabels()
-	numLabels := getNumLabels()
-	items := getItems()
+	num := i - 1
+	verse := "On the " + days[num] + " day of Christmas my true love gave to me: "
 
-	sb := ""
-	for j := 1; j <= i; j++ {
-		if j == 1 && i == 1 {
-			sb = fmt.Sprintf("%s %s", numLabels[j], items[j])
-		} else if j == 1 {
-			sb = fmt.Sprintf("and %s %s", numLabels[j], items[j])
-		} else {
-			sb = fmt.Sprintf("%s %s, %s", numLabels[j], items[j], sb)
+	if num > 0 {
+		for i := num; i > 0; i-- {
+			verse += gifts[i] + ", "
 		}
+
+		verse += "and "
 	}
 
-	return fmt.Sprintf(
-		"On the %s day of Christmas my true love gave to me: %s.",
-		dayLabels[i],
-		sb,
-	)
+	return verse + gifts[0] + "."
 }
 
 func Song() string {
-	const LENGTH = 12
-	sb := strings.Builder{}
+	var verses []string
 
-	for i := 1; i <= LENGTH; i++ {
-		v := Verse(i)
-		if i == LENGTH {
-			sb.WriteString(v)
-		} else {
-			sb.WriteString(v + "\n")
-		}
+	for i := range days {
+		verses = append(verses, Verse(i+1))
 	}
 
-	return sb.String()
+	return strings.Join(verses, "\n")
 }
